@@ -93,7 +93,13 @@ public class SellerDaoJdbc implements SellerDao {
 		try {
 			st = conn.prepareStatement("DELETE FROM seller WHERE id = ?");
 			st.setInt(1, id);
-			st.executeUpdate();
+			int rowsAffected = st.executeUpdate();
+			
+			if(rowsAffected == 0) {
+				throw new DbException("Operation failed! The data to be removed does not exist.");
+			}
+			
+			System.out.println("Data removed succesfully!");
 		} catch(SQLException e) {
 			throw new DbException(e.getMessage());
 		} finally {
